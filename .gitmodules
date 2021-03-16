@@ -1,0 +1,3 @@
+[submodule "generate-self-signed-cert"]
+	path = generate-self-signed-cert
+	url = git@github.com:myminseok/generate-self-signed-cert.git
