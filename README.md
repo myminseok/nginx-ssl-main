@@ -17,11 +17,16 @@ vi openssl-root.conf
 vi openssl-root.conf
 
 generate.sh
+
+```
+
+make certificate bundle (for nginx only. the domain cert should be at last)
+```
+cat root.crt domain.crt > bundle.crt
 ```
 
 
-
-test the certificate with nginx
+# RUN nginx with the certificate
 ```
 cd nginx-ssl-main
 
@@ -29,30 +34,33 @@ docker-compose up
 
 ```
 
+# test
 ```
 vi /etc/hosts
 127.0.0.1 test.com
 ```
 
+
 ```
-openssl s_client -connect test.com:443 -CAfile ./root.crt
+openssl s_client -connect test.com:443
+
 
 CONNECTED(00000003)
 depth=1 C = KR, O = MyCA, CN = root Self Signed CA
-verify return:1
-depth=0 C = KR, O = MyOrg, OU = MyOrg, CN = test.com
-verify return:1
+verify error:num=19:self signed certificate in certificate chain
+verify return:0
 ---
 Certificate chain
  0 s:/C=KR/O=MyOrg/OU=MyOrg/CN=test.com
    i:/C=KR/O=MyCA/CN=root Self Signed CA
+ 1 s:/C=KR/O=MyCA/CN=root Self Signed CA
+   i:/C=KR/O=MyCA/CN=root Self Signed CA
 ---
 Server certificate
 -----BEGIN CERTIFICATE-----
-...
-AZmiVC+jTdFk32/uhH8ksCkc9Fi8HFec4Ae47AgkNUZ40KMofvFOEwfJbElKouO/
-oDIVe5XEoLMepacdo8XGV00LY43vO6XdgHFUsPuqvFDstkyrjnNVIZ3DpQfqF90h
-fZ/ACEbD9MTn6vwve0p5m+uLA96C9Q==
+MIIDcjCCAlqgAwIBAgIJAIBsOfJJPa48MA0GCSqGSIb3DQEBCwUAMDoxCzAJBgNV
+
+SJuC7tkstafn/ecivOyH2awDdehAMQ==
 -----END CERTIFICATE-----
 subject=/C=KR/O=MyOrg/OU=MyOrg/CN=test.com
 issuer=/C=KR/O=MyCA/CN=root Self Signed CA
@@ -60,7 +68,7 @@ issuer=/C=KR/O=MyCA/CN=root Self Signed CA
 No client certificate CA names sent
 Server Temp Key: ECDH, X25519, 253 bits
 ---
-SSL handshake has read 1523 bytes and written 289 bytes
+SSL handshake has read 2279 bytes and written 289 bytes
 ---
 New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES256-GCM-SHA384
 Server public key is 2048 bit
