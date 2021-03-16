@@ -1,4 +1,4 @@
-# This is for ssl test on nginx.
+# This is for SSL cert test on nginx.
 
 
 # generate domain certs.
