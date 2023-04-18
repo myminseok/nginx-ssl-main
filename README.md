@@ -9,12 +9,14 @@ git clone https://github.com/myminseok/nginx-ssl-main
 cd nginx-ssl-main
 
 git submodule update
+or 
+git clone  https://github.com/myminseok/generate-self-signed-cert.git
 
 cd generate-self-signed-cert
 
 vi openssl-root.conf
 
-vi openssl-root.conf
+vi openssl-domain.conf
 
 generate.sh
 
