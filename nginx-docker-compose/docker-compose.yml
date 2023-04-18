@@ -7,4 +7,4 @@ services:
       - "443:443"
     volumes:
       - ./nginx-config:/etc/nginx/conf.d
-      - ./generate-self-signed-cert:/etc/nginx/ssl
+      - ../generate-self-signed-cert:/etc/nginx/ssl

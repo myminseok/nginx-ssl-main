@@ -18,23 +18,30 @@ vi openssl-root.conf
 
 generate.sh
 
-```
-
 make certificate bundle (for nginx only. the domain cert should be at last)
-```
 cat root.crt domain.crt > bundle.crt
 ```
 
+# prepare backend app(http)
 
-# RUN nginx with the certificate
+run any app using http protocol
+
+test 
+```
+curl http://localhost:8080
+```
+
+# Using docker-compose
+
+
+RUN nginx with the certificate
 ```
 cd nginx-ssl-main
 
 docker-compose up
 
 ```
-
-# test
+test
 ```
 vi /etc/hosts
 127.0.0.1 test.com
@@ -44,38 +51,68 @@ vi /etc/hosts
 ```
 openssl s_client -connect test.com:443
 
-
 CONNECTED(00000003)
 depth=1 C = KR, O = MyCA, CN = root Self Signed CA
 verify error:num=19:self signed certificate in certificate chain
 verify return:0
 ---
-Certificate chain
- 0 s:/C=KR/O=MyOrg/OU=MyOrg/CN=test.com
-   i:/C=KR/O=MyCA/CN=root Self Signed CA
- 1 s:/C=KR/O=MyCA/CN=root Self Signed CA
-   i:/C=KR/O=MyCA/CN=root Self Signed CA
----
-Server certificate
------BEGIN CERTIFICATE-----
-MIIDcjCCAlqgAwIBAgIJAIBsOfJJPa48MA0GCSqGSIb3DQEBCwUAMDoxCzAJBgNV
+...
+```
 
-SJuC7tkstafn/ecivOyH2awDdehAMQ==
------END CERTIFICATE-----
-subject=/C=KR/O=MyOrg/OU=MyOrg/CN=test.com
-issuer=/C=KR/O=MyCA/CN=root Self Signed CA
----
-No client certificate CA names sent
-Server Temp Key: ECDH, X25519, 253 bits
----
-SSL handshake has read 2279 bytes and written 289 bytes
----
-New, TLSv1/SSLv3, Cipher is ECDHE-RSA-AES256-GCM-SHA384
-Server public key is 2048 bit
-Secure Renegotiation IS supported
-Compression: NONE
-Expansion: NONE
-No ALPN negotiated
+## Using brew on Mac
 
+```
+brew install nginx
+```
+
+edit nginx.conf
+
+```
+vi nginx-mac/nginx.conf
+```
+
+```
+events {
+    worker_connections  1024;
+}
+http {
+  server {
+    listen 443 ssl;
+    server_name test.com
+    ssl on;
+    ssl_certificate     /PATH/TO/nginx-ssl-main/generate-self-signed-cert/domain.crt;
+    ssl_certificate_key /PATH/TO/nginx-ssl-main/generate-self-signed-cert/domain.key;
+     ssl_prefer_server_ciphers off;
+    location / {
+      proxy_pass http://127.0.0.1:8080;
+    }
+  }
+}
+```
+copy nginx.conf to 
+```
+cp nginx-mac/nginx.conf /opt/homebrew/etc/nginx/nginx.conf
+```
+
+test nginx.conf
+```
+nginx -t
+
+
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.
+conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful
+```
+
+start nginx
+```
+nginx -s stop
+nginx
+
+```
+
+reload conf
+```
+nginx -s reload
 ```
 
