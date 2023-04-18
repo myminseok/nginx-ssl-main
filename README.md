@@ -14,7 +14,7 @@ cd generate-self-signed-cert
 
 vi openssl-root.conf
 
-vi openssl-root.conf
+vi openssl-domain.conf
 
 generate.sh
 
