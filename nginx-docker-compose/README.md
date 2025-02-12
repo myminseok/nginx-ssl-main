@@ -6,7 +6,7 @@
 ```
 git clone https://github.com/myminseok/nginx-ssl-main
 
-cd nginx-ssl-main
+cd nginx-ssl-main/generate-self-signed-cert
 
 git submodule init
 
