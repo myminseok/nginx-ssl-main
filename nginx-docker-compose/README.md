@@ -8,7 +8,10 @@ git clone https://github.com/myminseok/nginx-ssl-main
 
 cd nginx-ssl-main
 
+git submodule init
+
 git submodule update
+
 or 
 git clone  https://github.com/myminseok/generate-self-signed-cert.git
 
